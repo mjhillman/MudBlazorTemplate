@@ -1,0 +1,35 @@
+﻿<MudDialog>
+    <DialogContent>
+        <MudFocusTrap>
+            <MudTextField T="string"
+                          @ref="@inputField"
+                          @bind-Value="@DialogData.InputValue"
+                          Label="@DialogData.InputPrompt"
+                          Variant="Variant.Outlined"
+                          Margin="Margin.Dense" 
+                          OnKeyUp="@CheckForEnterKey"/>
+        </MudFocusTrap>
+    </DialogContent>
+    <DialogActions>
+        <MudButton OnClick="Cancel">@DialogData.CancelButtonLabel</MudButton>
+        <MudButton Color="Color.Primary" OnClick="Submit">@DialogData.SubmitButtonLabel</MudButton>
+    </DialogActions>
+</MudDialog>
+
+    @code {
+    [CascadingParameter] MudDialogInstance MudDialog { get; set; }
+    readonly DialogOptions dialogOptions = new DialogOptions { CloseOnEscapeKey = true };
+    [Parameter] public InputDialogModel DialogData { get; set; }
+    MudTextField<string> inputField;
+
+    void CheckForEnterKey(KeyboardEventArgs args)
+    {
+        if (args.Key == "Enter")
+        {
+            Submit();
+        }
+    }
+
+    void Submit() => MudDialog.Close(DialogResult.Ok(true));
+    void Cancel() => MudDialog.Cancel();
+}
