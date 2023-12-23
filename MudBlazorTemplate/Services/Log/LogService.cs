@@ -32,7 +32,5 @@ namespace MudBlazorTemplate.Services
             }
         }
 
-        public LogService() { }
-
     }
 }

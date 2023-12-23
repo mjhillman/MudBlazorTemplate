@@ -7,7 +7,21 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <None Remove="LocalLog.sdb" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Content Include="LocalLog.sdb">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+  </ItemGroup>
+
+  <ItemGroup>
     <PackageReference Include="MudBlazor" Version="6.11.2" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\HITS.LIB.Sqlite\HITS.LIB.Sqlite.csproj" />
   </ItemGroup>
 
 </Project>

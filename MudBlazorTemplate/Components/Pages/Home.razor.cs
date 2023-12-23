@@ -17,23 +17,26 @@ namespace MudBlazorTemplate.Components.Pages
         [Inject]
         private IHttpContextAccessor HttpContextAccessor { get; set; }
 
-        [Inject]
-        private NavigationManager NavigationManager { get; set; }
-
         protected override async Task OnAfterRenderAsync(bool firstRender)
         {
             try
             {
                 if (firstRender)
                 {
-                    await InitSession();
-                    await ShowConfirmationDialogAsync("TEST", "Confirmation Dialog Test");
-                    string password = await ShowPasswordDialog();
-                    await ShowConfirmationDialogAsync("Password Test", $"The password is {password} for IP {SessionService.CurrentSession.IPAddress}");
+                    if (SessionService == null || SessionService.CurrentSession == null || !SessionService.CurrentSession.IsAuthenticated)
+                    {
+                        await InitSession();
+                        await ShowConfirmationDialogAsync("TEST", "Confirmation Dialog Test");
+                        string password = await ShowPasswordDialog();
+                        await ShowConfirmationDialogAsync("Password Test", $"The password is {password} for IP {SessionService.CurrentSession.IPAddress}");
+                        SessionService.CurrentSession.IsAuthenticated = true;
+                        await LogService.InsertLogData(Program.ConnectionString, "Logon", SessionService?.CurrentSession?.IPAddress);
+                    }
                 }
             }
             catch (Exception ex)
             {
+                await LogService.InsertLogData(Program.ConnectionString, ex.Message, SessionService?.CurrentSession?.IPAddress);
                 await ShowConfirmationDialogAsync("Error", $"{ex.Message}{Environment.NewLine}{ex.InnerException.Message}");
             }
         }
@@ -54,12 +57,13 @@ namespace MudBlazorTemplate.Components.Pages
                         IsAuthenticated = false,
                         EmailAddress = "",
                         IPAddress = HttpContextAccessor?.HttpContext?.Connection?.RemoteIpAddress?.ToString(),
-                        UserAgent = HttpContextAccessor?.HttpContext?.Request?.Headers.UserAgent
+                        UserAgent = HttpContextAccessor?.HttpContext?.Request?.Headers?.UserAgent
                     };
                 }
             }
             catch (Exception ex)
             {
+                await LogService.InsertLogData(Program.ConnectionString, ex.Message, SessionService?.CurrentSession?.IPAddress);
                 await ShowConfirmationDialogAsync("Error", $"{ex.Message}{Environment.NewLine}{ex.InnerException.Message}");
             }
         }
@@ -75,6 +79,7 @@ namespace MudBlazorTemplate.Components.Pages
             }
             catch (Exception ex)
             {
+                await LogService.InsertLogData(Program.ConnectionString, ex.Message, SessionService?.CurrentSession?.IPAddress);
                 await ShowConfirmationDialogAsync("Error", $"{ex.Message}{Environment.NewLine}{ex.InnerException.Message}");
                 return "";
             }

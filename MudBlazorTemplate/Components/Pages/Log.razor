@@ -1,0 +1,55 @@
+﻿@page "/Log"
+@using MudBlazorTemplate.Services
+
+<PageTitle>Log</PageTitle>
+
+<HeadContent>
+    <meta name="Log" content="This page displays the log table content." />
+    <meta name="author" content="MikeHillman.net">
+    <link rel="icon" href="favicon.ico" type="image/x-icon">
+</HeadContent>
+
+<MudPaper Class="pa-8 ma-2" Outlined="true">
+
+    <MudButton Href="/" 
+               Variant="Variant.Filled"
+               StartIcon="@Icons.Material.Filled.Backup"
+               Size="Size.Small"
+               Class="mr-4"               
+               Color="Color.Primary">Cancel</MudButton>
+
+
+    <MudButton Variant="Variant.Filled"
+               StartIcon="@Icons.Material.Filled.Delete"
+               Size="Size.Small"
+               Class="mr-4"
+               @onclick="DeleteButtonClick"
+               Color="Color.Primary">Clear Log</MudButton>
+
+    <br /><br />
+
+
+
+    <MudText Typo="Typo.h6">Log</MudText>
+    <br />
+    <MudDataGrid T="LogModel"
+                 Items="@logList"
+                 Bordered="true"
+                 Dense="true"
+                 Filterable="true"
+                 SortMode=SortMode.Single
+                 Groupable="true"
+                 ReadOnly="true"
+                 Class="clm-row-small">
+        <Columns>
+            <PropertyColumn Property="x => x.Id" />
+            <PropertyColumn Property="x => x.Ip" />
+            <PropertyColumn Property="x => x.Message" />
+            <PropertyColumn Property="x => x.MessageDate" Format="MM/dd/yyyy hh:mm" />
+        </Columns>
+        <PagerContent>
+            <MudDataGridPager T="@LogModel" />
+        </PagerContent>
+    </MudDataGrid>
+</MudPaper>
+
