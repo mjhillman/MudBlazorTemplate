@@ -7,6 +7,10 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <Content Remove="wwwroot\app.css" />
+  </ItemGroup>
+
+  <ItemGroup>
     <None Remove="LocalLog.sdb" />
   </ItemGroup>
 

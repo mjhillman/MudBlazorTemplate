@@ -7,8 +7,6 @@ namespace MudBlazorTemplate
 {
     public partial class Program
     {
-        public static string ConnectionString { get; set; }
-
         public static void Main(string[] args)
         {
             var builder = WebApplication.CreateBuilder(args);
@@ -47,6 +45,7 @@ namespace MudBlazorTemplate
     partial class Program
     {
         public static string ExecutingDirectory { get; set; }
+        public static string ConnectionString { get; set; }
 
         public static void InitConfiguration()
         {
