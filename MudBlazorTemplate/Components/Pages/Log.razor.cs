@@ -25,7 +25,7 @@ namespace MudBlazorTemplate.Components.Pages
             catch (Exception ex)
             {
                 await DialogService.ShowMessageBox("Error", ex.Message, yesText: "Ok").ConfigureAwait(true);
-                await LogService.InsertLogData(Program.ConnectionString, ex.Message, SessionService.CurrentSession.IPAddress).ConfigureAwait(true);
+                await LogService.InsertLogData(ex.Message, SessionService.CurrentSession.IPAddress).ConfigureAwait(true);
             }
         }
 
@@ -33,20 +33,20 @@ namespace MudBlazorTemplate.Components.Pages
         {
             try
             {
-                logList = await LogService.GetLog(Program.ConnectionString).ConfigureAwait(true);
+                logList = await LogService.GetLog().ConfigureAwait(true);
                 StateHasChanged();
             }
             catch (Exception ex)
             {
                 await DialogService.ShowMessageBox("Error", ex.Message, yesText: "Ok").ConfigureAwait(true);
-                await LogService.InsertLogData(Program.ConnectionString, ex.Message, SessionService.CurrentSession.IPAddress).ConfigureAwait(true);
+                await LogService.InsertLogData(ex.Message, SessionService.CurrentSession.IPAddress).ConfigureAwait(true);
             }
         }
 
         async Task DeleteButtonClick()
         {
-            await LogService.DeleteLog(Program.ConnectionString).ConfigureAwait(true);
-            await LogService.InsertLogData(Program.ConnectionString, "Deleted All Log Records", SessionService.CurrentSession.IPAddress).ConfigureAwait(true);
+            await LogService.DeleteLog().ConfigureAwait(true);
+            await LogService.InsertLogData("Deleted All Log Records", SessionService.CurrentSession.IPAddress).ConfigureAwait(true);
             await LoadLogGridAsync().ConfigureAwait(true);
         }
 

@@ -1,7 +1,6 @@
 ﻿using Microsoft.AspNetCore.Components;
 using MudBlazor;
 using MudBlazorTemplate.Components.Custom;
-using MudBlazorTemplate.Components.Layout;
 using MudBlazorTemplate.Services;
 
 namespace MudBlazorTemplate.Components.Pages
@@ -27,16 +26,14 @@ namespace MudBlazorTemplate.Components.Pages
                     {
                         await InitSession();
                         await ShowConfirmationDialogAsync("TEST", "Confirmation Dialog Test");
-                        string password = await ShowPasswordDialog();
-                        await ShowConfirmationDialogAsync("Password Test", $"The password is {password} for IP {SessionService.CurrentSession.IPAddress}");
                         SessionService.CurrentSession.IsAuthenticated = true;
-                        await LogService.InsertLogData(Program.ConnectionString, "Logon", SessionService?.CurrentSession?.IPAddress);
+                        await LogService.InsertLogData("Logon", SessionService?.CurrentSession?.IPAddress);
                     }
                 }
             }
             catch (Exception ex)
             {
-                await LogService.InsertLogData(Program.ConnectionString, ex.Message, SessionService?.CurrentSession?.IPAddress);
+                await LogService.InsertLogData(ex.Message, SessionService?.CurrentSession?.IPAddress);
                 await ShowConfirmationDialogAsync("Error", $"{ex.Message}{Environment.NewLine}{ex.InnerException.Message}");
             }
         }
@@ -45,17 +42,14 @@ namespace MudBlazorTemplate.Components.Pages
         {
             try
             {
-                if (SessionService == null)
-                {
-                    SessionService = new SessionService();
-                }
+                if (SessionService == null) SessionService = new SessionService();
 
                 if (SessionService.CurrentSession == null)
                 {
                     SessionService.CurrentSession = new SessionModel
                     {
-                        IsAuthenticated = false,
-                        EmailAddress = "",
+                        IsAuthenticated = true,
+                        EmailAddress = "you@you.com",
                         IPAddress = HttpContextAccessor?.HttpContext?.Connection?.RemoteIpAddress?.ToString(),
                         UserAgent = HttpContextAccessor?.HttpContext?.Request?.Headers?.UserAgent
                     };
@@ -63,25 +57,8 @@ namespace MudBlazorTemplate.Components.Pages
             }
             catch (Exception ex)
             {
-                await LogService.InsertLogData(Program.ConnectionString, ex.Message, SessionService?.CurrentSession?.IPAddress);
+                await LogService.InsertLogData(ex.Message, SessionService?.CurrentSession?.IPAddress);
                 await ShowConfirmationDialogAsync("Error", $"{ex.Message}{Environment.NewLine}{ex.InnerException.Message}");
-            }
-        }
-
-        public async Task<string> ShowPasswordDialog()
-        {
-            try
-            {
-                DialogParameters passwordDialogParameters = new DialogParameters { { "DialogData", new InputDialogModel("Password:") } };
-                IDialogReference dialogresult = DialogService.Show<InputDialog>("Enter Password", passwordDialogParameters);
-                await dialogresult.Result.ConfigureAwait(true);
-                return ((InputDialog)((DialogReference)dialogresult).Dialog).DialogData.InputValue;
-            }
-            catch (Exception ex)
-            {
-                await LogService.InsertLogData(Program.ConnectionString, ex.Message, SessionService?.CurrentSession?.IPAddress);
-                await ShowConfirmationDialogAsync("Error", $"{ex.Message}{Environment.NewLine}{ex.InnerException.Message}");
-                return "";
             }
         }
 
@@ -89,8 +66,7 @@ namespace MudBlazorTemplate.Components.Pages
         {
             try
             {
-                var parameters = new DialogParameters { { "DialogPrompt", prompt } };
-                var dialog = DialogService.Show<ConfirmationDialog>(title, parameters);
+                var dialog = DialogService.Show<ConfirmationDialog>(title, new DialogParameters { { "DialogPrompt", prompt } });
                 var result = await dialog.Result.ConfigureAwait(true);
             }
             catch (Exception)
@@ -129,4 +105,5 @@ namespace MudBlazorTemplate.Components.Pages
     }
 
 #endregion
+
 }

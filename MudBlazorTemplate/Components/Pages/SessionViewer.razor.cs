@@ -1,5 +1,5 @@
-﻿using HITS.LIB.Utilities;
-using Microsoft.AspNetCore.Components;
+﻿using Microsoft.AspNetCore.Components;
+using MudBlazorTemplate.Components.Custom;
 using MudBlazorTemplate.Services;
 
 namespace MudBlazorTemplate.Components.Pages

@@ -12,8 +12,7 @@ namespace MudBlazorTemplate
             var builder = WebApplication.CreateBuilder(args);
 
             // Add services to the container.
-            builder.Services.AddRazorComponents()
-                .AddInteractiveServerComponents();
+            builder.Services.AddRazorComponents().AddInteractiveServerComponents();
             builder.Services.AddMudServices();
             builder.Services.AddHttpContextAccessor();
             builder.Services.AddScoped<SessionService>();
