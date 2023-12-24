@@ -7,8 +7,8 @@ namespace MudBlazorTemplate.Services
     {
         public static async Task<List<LogModel>> GetLog()
         {
-                string sql = $"SELECT * FROM Log WHERE MessageDate > '{DateTime.Now.AddMonths(-1)}' ORDER BY MessageDate DESC;";
-                return await GetDataTableAsListAsync<LogModel>(Program.ConnectionString, sql).ConfigureAwait(true);
+            string sql = $"SELECT * FROM Log WHERE MessageDate > '{DateTime.Now.AddMonths(-1)}' ORDER BY MessageDate DESC;";
+            return await GetDataTableAsListAsync<LogModel>(Program.ConnectionString, sql).ConfigureAwait(true);
         }
 
         public static async Task<int> InsertLogData(string message, string ip = "")
@@ -28,9 +28,7 @@ namespace MudBlazorTemplate.Services
         /// </summary>
         /// <typeparam name="T">your data type that corresponds to the database data</typeparam>
         /// <param name="connectionString">the database connection string</param>
-        /// <param name="sql">the stored procedure name or SQL statement</param>
-        /// <param name="parameters">optional: the parameter dictionary</param>
-        /// <param name="timeout">query timeout in seconds</param>
+        /// <param name="sql">the SQL select statement</param>
         /// <returns>List</returns>
         private static async Task<List<T>> GetDataTableAsListAsync<T>(string connectionString, string sql) where T : new()
         {
@@ -84,12 +82,10 @@ namespace MudBlazorTemplate.Services
         }
 
         /// <summary>
-        /// This method will execute a SQL Stored Procedure.
+        /// This method will execute a SQL Insert, Update or Delete statement.
         /// </summary>
         /// <param name="connectionString">the database connection string</param>
-        /// <param name="sql">the stored procedure name or SQL statement</param>
-        /// <param name="parameters">optional: the parameter dictionary</param>
-        /// <param name="timeout">query timeout in seconds</param>
+        /// <param name="sql">the SQL statement</param>
         /// <returns>the number of rows affected</returns>
         private static async Task<int> ExecuteNonQueryAsync(string connectionString, string sql)
         {

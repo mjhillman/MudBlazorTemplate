@@ -12,8 +12,6 @@ namespace MudBlazorTemplate.Components.Pages
         [Inject]
         private SessionService SessionService { get; set; }
 
-        private bool disposedValue;
-
         private List<LogModel> logList = new List<LogModel>();
 
         protected override async Task OnAfterRenderAsync(bool firstRender)
@@ -51,6 +49,9 @@ namespace MudBlazorTemplate.Components.Pages
         }
 
         #region Dispose
+
+        private bool disposedValue;
+
         protected virtual void Dispose(bool disposing)
         {
             if (!disposedValue)
